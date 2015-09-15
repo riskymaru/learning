@@ -58,9 +58,17 @@ GBA.Preloader.prototype = {
         //load image
         this.load.image('bg1','assets/html5/img/bg/bg.png')
         this.load.atlas( 'heroes', 'assets/html5/img/char/heroes.png', 'assets/html5/img/char/heroes.json' );
+        this.load.atlas( 'btn', 'assets/html5/img/btn/btn.png', 'assets/html5/img/btn/btn.json' );
+
+        this.load.image('hero_icon','assets/html5/img/char/fav.png')
+
+        this.load.bitmapFont('flappy', 'assets/html5/fonts/flappy.png', 'assets/html5/fonts/flappy.fnt');
+        this.load.bitmapFont('small_led', 'assets/html5/fonts/small_led.png', 'assets/html5/fonts/small_led.fnt');
+
+        //fonts
+
        
         this.load.onLoadComplete.add(loadComplete, this);
-
         function loadComplete(){
             this.state.start('MainMenu');
         }

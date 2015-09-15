@@ -4,7 +4,7 @@ trace = function _trace(){
          for (i = 0; i < arguments.length; i++) {
              this.arr.push(arguments[i]);
          }
-       console.log('[trace]>',this.arr,"[Caller]>",arguments.callee.caller);
+       console.log('[trace]>',this.arr/*,"[Caller]>",arguments.callee.caller*/);
         //debug.info ( 'debug:', this.arr);//error/debug/log/info/warn
     }
 
@@ -50,7 +50,7 @@ function custom(game){
     Sprite.prototype.constructor = Sprite
     //-------------------------------------------
 
-     TextField = function _TextField(game,str,w,h,style,sz,border){
+    TextField = function _TextField(game,str,w,h,style,sz,border){
             Phaser.Sprite.call(this,game,0,0,"")
 
             if(border){
@@ -63,16 +63,16 @@ function custom(game){
             }
             
             !sz ? sz = 14 : 0;
-            //!this.style ? this.style = { font: sz+"px Tahoma", fill: "#ffffff", align: "center" } : this.style = style;
-            //!this.style ? (this.tx_x = 0) : (this.tx_x = 0+(w*0.5));
+            !this.style ? this.style = { font: sz+"px Tahoma", fill: "#ffffff", align: "center" } : this.style = style;
+            !this.style ? (this.tx_x = 0) : (this.tx_x = 0+(w*0.5));
 
             this.text = new Phaser.BitmapText(game,0,0,style,str,sz)//game.add.bitmapText(0, 0, 'led', 'sample text', 20);//new Phaser.Text(game,this.tx_x,0,str,this.style)//game.add.text(x+(w*0.5),y, "Sample Text", this.style);//
-            this.text.anchor.set(0.5,0);
+            this.text.anchor.set(0,0);
             this.text.setText(str);
             this.addChild(this.text)
 
             this.text.x = w*0.5
-            this.text.x = w*0.5
+            this.text.y = h*0.5
             this.text.wordWrap = true;
             this.text.wordWrapWidth = w -5;
 
