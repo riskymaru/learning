@@ -19,15 +19,15 @@ function set3(game,GBA){
 		var set1 = new Array()
 		var set2 = new Array();
 
-		set1 = [0,1,2]
-		set2 = [1,0,1]
+		set1 = [0,1,2];
+		set2 = [1,0,1];
 
 		var bg = new GBA.BG(game);
 		bg.x = 400;
 		bg.y = 200;
 		this.addChild(bg)
 
-		this.hud = new GBA.HUD(game,set1,set2)
+		this.hud = new GBA.HUD(game,set1,set2);
 		this.addChild(this.hud)
 
 		var hero = new Array();
@@ -51,72 +51,96 @@ function set3(game,GBA){
 		this.cursor = new Sprite(200,200,"hero_icon");
 		this.addChild(this.cursor);
 
-		//---------------------------------------------------------------------------
-		//functions
-
+		//init units
 		whosturn = hero.concat(enemy);
 
-		function compare(a,b) {
-		  if (a.spd < b.spd)
-		    return -1;
-		  if (a.spd > b.spd)
-		    return 1;
-		  return 0;
-		}
-
-
-		whosturn.sort(compare);	
-
-
-		var nm = whosturn.length
-		for(k=0;k<nm;k++){
-			trace(whosturn[k].role )
-			if(whosturn[k].role == "enemy"){
-				whostgt.push(hero[parseInt(Math.random()*hero.length)])
-			}else{
-				whostgt.push(enemy[2]);
-			}
-		}
-
-
+		//---------------------------------------------------------------------------
+		//functions
+		
 		this.AttackMode = function atk(hero,tgt,type){
-			//type 0 is melee//type 1 range//type 2 melee special//type 3 = range special
-			type==undefined? type = 0 : 0
-			
-			//melee
-			if(hero!=undefined && tgt!=undefined && type == 0){
-				TweenMax.to(hero,0.2,{delay:0,x:tgt.x + (hero.tbody.scale.x== -1? 60 : -60 ),y:tgt.y,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
-					onComplete:function(){
-						tgt.hp -= 5
-						tgt.stat_bar.updateStat(tgt.hp,tgt.fhp,tgt.mp,tgt.fmp)
+			if(hero.hp>0){
+					//type 0 is melee//type 1 range//type 2 melee special//type 3 = range special
+					type==undefined? type = 0 : 0
+					
+					//melee
+					if(hero!=undefined && tgt!=undefined && type == 0){
+						TweenMax.to(hero,0.2,{delay:0,x:tgt.x + (hero.tbody.scale.x== -1? 60 : -60 ),y:tgt.y,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
+							onComplete:function(){
+								tgt.hp -= 5
+								tgt.stat_bar.updateStat(tgt.hp,tgt.fhp,tgt.mp,tgt.fmp)
 
-						tgt.tbody.tint = "0xff0000"
-						TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
-					}});
-				TweenMax.to(hero,0.1,{delay:2,x:hero._x,y:hero._y,ease:Back.easeOut});
-			}else 
-			//range
-			if(hero!=undefined && tgt!=undefined && type == 1){
-				TweenMax.to(hero,0.3,{delay:0,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
-					onComplete:function(){
-						tgt.hp -= 5
-						tgt.stat_bar.updateStat(tgt.hp,tgt.fhp,tgt.mp,tgt.fmp)
+								tgt.tbody.tint = "0xff0000"
+								TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
 
-						tgt.tbody.tint = "0xff0000"
-						TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
-					}});
-				TweenMax.to(hero,0.1,{delay:2,ease:Back.easeOut});
+								if(tgt.hp <=0){
+									self.checkDead(tgt);
+								}
+							}});
+						TweenMax.to(hero,0.1,{delay:2,x:hero._x,y:hero._y,ease:Back.easeOut});
+					}else 
+					//range
+					if(hero!=undefined && tgt!=undefined && type == 1){
+						TweenMax.to(hero,0.3,{delay:0,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
+							onComplete:function(){
+								tgt.hp -= 5
+								tgt.stat_bar.updateStat(tgt.hp,tgt.fhp,tgt.mp,tgt.fmp)
+
+								tgt.tbody.tint = "0xff0000"
+								TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
+							}});
+						TweenMax.to(hero,0.1,{delay:2,ease:Back.easeOut});
+					}
 			}
 		}//<AttackMode
 
-			var TL = new TimelineMax();
 
-			for(k=0;k<whosturn.length;k++){
-				TL.append(	TweenMax.delayedCall(3,this.AttackMode,[whosturn[k],whostgt[k],whosturn[k].ftype])	); 
-			}
+		this.checkDead = function _checkDead(who){
+			 who.tbody.loadTexture('btn', 0, true);
+			 removeArray(whosturn,who);
+			 removeArray(whostgt,who);
+			 if(who.role == "enemy"){
+			 	who.stat_bar.visible = false;
+			 }
+			 trace(whosturn)
+		};
 
-			TL.repeat(1)
+		this.fight = function _fight(o){
 
+						function compare(a,b) {
+						  if (a.spd < b.spd)
+						    return -1;
+						  if (a.spd > b.spd)
+						    return 1;
+						  return 0;
+						}
+
+						whosturn.sort(compare);	
+
+						nm = whosturn.length
+						
+						for(k=0;k<nm;k++){
+							trace(whosturn[k].role )
+							if(whosturn[k].role == "enemy"){
+								whostgt.push(hero[Math.floor(Math.random()*hero.length)])
+							}else{
+								whostgt.push(enemy[0]);
+							}
+						}
+
+						TL = new TimelineMax();
+
+						for(k=0;k<whosturn.length;k++){
+							TL.append(	TweenMax.delayedCall(3,this.AttackMode,[whosturn[k],whostgt[k],whosturn[k].ftype])	); 
+						}
+
+						TL.repeat(3)
+		}
+		
+
+		//Tap(self.hud.btn[0],this.fight)
+
+		this.fight();
+			
 
 		return this;
 	}
@@ -193,7 +217,7 @@ function set3(game,GBA){
 	    									   GBA.UNIT[unit].fmp)
   		 this.stat_bar.y = -70
   		 this.stat_bar.x = -25
-  		 this.addChild(this.stat_bar)
+  		 this.addChild(this.stat_bar);
     };
     GBA.Enemy.prototype = Object.create(Phaser.Sprite.prototype);
     GBA.Enemy.prototype.constructor = GBA.Enemy;
@@ -343,13 +367,19 @@ function set3(game,GBA){
 
 
     //UNITS
+
+    /*
+	** ftype (0:single melee) (1:single range) (3:range AOE)
+	
+    */
+
     //hero1
     GBA.UNIT[0] = {
 		hp:20,
 		fhp:20,
 		mp:10,
 		fmp:10,
-		atk:4,
+		atk:6,
 		mgc:2,
 		def:1,
 		res:5,
