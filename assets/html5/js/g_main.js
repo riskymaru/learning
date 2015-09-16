@@ -11,7 +11,7 @@ function set3(game,GBA){
 		var xpos = [80,650]
 
 		var whosturn = new Array();
-		var whostgt = new Array(); // enemy will attack this targets
+		var whostgt = new Array(); // attack this targets
 	
 		//set keyboard
 		var hotkey = game.input.keyboard.createCursorKeys();
@@ -19,8 +19,10 @@ function set3(game,GBA){
 		var set1 = new Array()
 		var set2 = new Array();
 
-		set1 = [0,1,2];
-		set2 = [1,0,1];
+		var TL = new TimelineMax // animation control for fight scene
+
+		set1 = [0,1,0];
+		set2 = [2,2,2];
 
 		var bg = new GBA.BG(game);
 		bg.x = 400;
@@ -56,52 +58,96 @@ function set3(game,GBA){
 
 		//---------------------------------------------------------------------------
 		//functions
+
+		this.changeTarget = function _changeTarget( role ){
+			if(role == "hero"){
+				for(k=0;k<enemy.length;k++){
+					if(enemy[k].hp>0){
+						return enemy[k];
+					}
+				}
+			}else 
+			if(role == "enemy"){
+				for(k=0;k<hero.length;k++){
+					if(hero[k].hp>0){
+						return hero[k];
+					}
+				}
+			}
+		}
 		
-		this.AttackMode = function atk(hero,tgt,type){
-			if(hero.hp>0){
+		this.AttackMode = function atk(attacker,tgt,type){
+			if(attacker.hp>0){
 					//type 0 is melee//type 1 range//type 2 melee special//type 3 = range special
 					type==undefined? type = 0 : 0
-					
+
+					if(tgt.hp <=0){
+						tgt = self.changeTarget(attacker.role)
+					}
+
 					//melee
-					if(hero!=undefined && tgt!=undefined && type == 0){
-						TweenMax.to(hero,0.2,{delay:0,x:tgt.x + (hero.tbody.scale.x== -1? 60 : -60 ),y:tgt.y,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
-							onComplete:function(){
-								tgt.hp -= 5
-								tgt.stat_bar.updateStat(tgt.hp,tgt.fhp,tgt.mp,tgt.fmp)
+					if(attacker!=undefined && tgt!=undefined && type == 0 && tgt.hp>0 && tgt!=null){
+							
+								TweenMax.to(attacker,0.2,{delay:0,x:tgt.x + (attacker.tbody.scale.x== -1? 60 : -60 ),y:tgt.y,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
+									onComplete:function(){
+										tgt.hp -= attacker.atk
+										
+										tgt.tbody.tint = "0xff0000"
+										TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
 
-								tgt.tbody.tint = "0xff0000"
-								TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
-
-								if(tgt.hp <=0){
-									self.checkDead(tgt);
-								}
-							}});
-						TweenMax.to(hero,0.1,{delay:2,x:hero._x,y:hero._y,ease:Back.easeOut});
+										if(tgt.hp <=0){
+											tgt.hp = 0
+											TweenMax.delayedCall(0.5,self.checkDead,[tgt]);
+										}
+										tgt.stat_bar.updateStat(tgt.hp,tgt.fhp,tgt.mp,tgt.fmp)
+									}});
+								TweenMax.to(attacker,0.1,{delay:2,x:attacker._x,y:attacker._y,ease:Back.easeOut});
 					}else 
 					//range
-					if(hero!=undefined && tgt!=undefined && type == 1){
-						TweenMax.to(hero,0.3,{delay:0,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
-							onComplete:function(){
-								tgt.hp -= 5
-								tgt.stat_bar.updateStat(tgt.hp,tgt.fhp,tgt.mp,tgt.fmp)
+					if(attacker!=undefined && tgt!=undefined && type == 1 && tgt.hp>0 && tgt!=null){
+								TweenMax.to(attacker,0.3,{delay:0,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
+									onComplete:function(){
+										tgt.hp -= attacker.atk
 
-								tgt.tbody.tint = "0xff0000"
-								TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
-							}});
-						TweenMax.to(hero,0.1,{delay:2,ease:Back.easeOut});
+										tgt.tbody.tint = "0xff0000"
+										TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
+
+										if(tgt.hp <=0){
+											tgt.hp = 0
+											TweenMax.delayedCall(0.5,self.checkDead,[tgt]);
+										}
+										tgt.stat_bar.updateStat(tgt.hp,tgt.fhp,tgt.mp,tgt.fmp)
+
+									}});
+
+								TweenMax.to(attacker,0.1,{delay:2,ease:Back.easeOut});
 					}
+
+				
 			}
 		}//<AttackMode
 
 
 		this.checkDead = function _checkDead(who){
-			 who.tbody.loadTexture('btn', 0, true);
+			 who.tbody.loadTexture('btn');
+			 who.tbody.frameName = "tomb0000"
 			 removeArray(whosturn,who);
 			 removeArray(whostgt,who);
+
+			 if(who.role == "hero"){
+			 	removeArray(hero,who)
+
+			 }else
 			 if(who.role == "enemy"){
+			 	removeArray(enemy,who)
 			 	who.stat_bar.visible = false;
 			 }
-			 trace(whosturn)
+
+			 if(enemy.length<=0){
+			 	trace("you win")
+			 	self.call_win_screen();
+			 }
+			 //trace(whosturn)
 		};
 
 		this.fight = function _fight(o){
@@ -119,7 +165,7 @@ function set3(game,GBA){
 						nm = whosturn.length
 						
 						for(k=0;k<nm;k++){
-							trace(whosturn[k].role )
+							//trace(whosturn[k].role )
 							if(whosturn[k].role == "enemy"){
 								whostgt.push(hero[Math.floor(Math.random()*hero.length)])
 							}else{
@@ -130,18 +176,30 @@ function set3(game,GBA){
 						TL = new TimelineMax();
 
 						for(k=0;k<whosturn.length;k++){
-							TL.append(	TweenMax.delayedCall(3,this.AttackMode,[whosturn[k],whostgt[k],whosturn[k].ftype])	); 
+							TL.append(	TweenMax.delayedCall(k==0?2:3,this.AttackMode,[whosturn[k],whostgt[k],whosturn[k].ftype])	); 
 						}
 
-						TL.repeat(3)
+						TL.repeat(5)
 		}
 		
+		/*Tap(self.hud.btn[0],function(){
+			self.fight();
+			trace('battle')
+		})*/
 
-		//Tap(self.hud.btn[0],this.fight)
 
 		this.fight();
-			
 
+		this.call_win_screen = function _call_win_screen(){
+				this.win_screen = new GBA.WIN_SCREEN(game)
+				this.win_screen.anchor.setTo(0.5)
+				this.win_screen.position.setTo(400,200)
+				this.addChild(this.win_screen)
+				TweenMax.from(this.win_screen,1,{y:-300,ease:Back.easeOut})
+		}
+
+		
+			
 		return this;
 	}
 	GBA.Environment.prototype = Object.create(Phaser.Group.prototype);
@@ -172,6 +230,7 @@ function set3(game,GBA){
   		 this.fhp = GBA.UNIT[unit].fhp
   		 this.mp = GBA.UNIT[unit].mp
   		 this.fmp = GBA.UNIT[unit].fmp
+  		 this.atk = GBA.UNIT[unit].atk
   		 this.spd = GBA.UNIT[unit].spd
   		 this.ailments = GBA.UNIT[unit].ailments
   		 this.ftype = GBA.UNIT[unit].ftype
@@ -204,6 +263,7 @@ function set3(game,GBA){
   		 this.fhp = GBA.UNIT[unit].fhp
   		 this.mp = GBA.UNIT[unit].mp
   		 this.fmp = GBA.UNIT[unit].fmp
+  		 this.atk = GBA.UNIT[unit].atk
   		 this.spd = GBA.UNIT[unit].spd
   		 this.ailments = GBA.UNIT[unit].ailments
   		 this.ftype = GBA.UNIT[unit].ftype
@@ -328,6 +388,7 @@ function set3(game,GBA){
 
   		for(b=0;b<4;b++){
   			this.btn[b] = new Sprite(500 +(80*b),360,"btn");
+
   			this.addChild(this.btn[b]);
   		}
 
@@ -344,6 +405,30 @@ function set3(game,GBA){
     }
     GBA.MENU.prototype = Object.create(Phaser.Sprite.prototype);
     GBA.MENU.prototype.constructor = GBA.MENU;
+
+
+    GBA.WIN_SCREEN = function _WIN_SCREEN(game){
+    	Phaser.Sprite.call(this,game,0,0);
+
+    	var bg = new Sprite(0,0,"screen1")
+    	bg.scale.setTo(2.5)
+    	bg.tint = 0x0066cc
+    	this.addChild(bg);
+
+    	var victory_txt = new TextField(game,"VICTORY",0,0,"flappy",50,false);
+    	victory_txt.anchor.setTo(0.5)
+    	victory_txt.position.setTo(-(victory_txt.text.width*0.5),-170)
+    	victory_txt.text.tint = 0xffff00
+    	this.addChild(victory_txt)
+
+
+    	btn_tx = new TextField(game,"OK",0,0,"flappy",40,false);
+    	btn_tx.position.setTo(-(btn_tx.text.width*0.5),120)
+    	this.addChild(btn_tx)
+
+    }
+    GBA.WIN_SCREEN.prototype = Object.create(Phaser.Sprite.prototype);
+    GBA.WIN_SCREEN.prototype.constructor = GBA.WIN_SCREEN;
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -375,11 +460,11 @@ function set3(game,GBA){
 
     //hero1
     GBA.UNIT[0] = {
-		hp:20,
-		fhp:20,
+		hp:50,
+		fhp:50,
 		mp:10,
 		fmp:10,
-		atk:6,
+		atk:20,
 		mgc:2,
 		def:1,
 		res:5,
@@ -392,8 +477,8 @@ function set3(game,GBA){
 	};
 	//hero 2
 	GBA.UNIT[1] = {
-		hp:24,
-		fhp:24,
+		hp:15,
+		fhp:15,
 		mp:3,
 		fmp:3,
 		atk:6,
@@ -409,8 +494,8 @@ function set3(game,GBA){
 
 	//blob
 	GBA.UNIT[2] = {
-		hp:24,
-		fhp:24,
+		hp:50,
+		fhp:50,
 		mp:3,
 		fmp:3,
 		atk:6,

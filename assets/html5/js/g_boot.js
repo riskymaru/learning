@@ -61,6 +61,7 @@ GBA.Preloader.prototype = {
         this.load.atlas( 'btn', 'assets/html5/img/btn/btn.png', 'assets/html5/img/btn/btn.json' );
 
         this.load.image('hero_icon','assets/html5/img/char/fav.png')
+        this.load.image('screen1','assets/html5/img/hud/screen1.png')
 
         this.load.bitmapFont('flappy', 'assets/html5/fonts/flappy.png', 'assets/html5/fonts/flappy.fnt');
         this.load.bitmapFont('small_led', 'assets/html5/fonts/small_led.png', 'assets/html5/fonts/small_led.fnt');
