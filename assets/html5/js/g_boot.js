@@ -56,6 +56,8 @@ GBA.Preloader.prototype = {
       
 
         //load image
+        this.load.image('quad','assets/html5/img/square.jpg')
+        
         this.load.image('bg1','assets/html5/img/bg/bg.png')
         this.load.atlas( 'heroes', 'assets/html5/img/char/heroes.png', 'assets/html5/img/char/heroes.json' );
         this.load.atlas( 'btn', 'assets/html5/img/btn/btn.png', 'assets/html5/img/btn/btn.json' );
