@@ -240,7 +240,7 @@ function set3(game,GBA){
 
     	Tap(btn_tx,function(){
     		if(fnc != undefined || fnc != null){
-    			TweenMax.delayedCall(1,fnc);
+    			TweenMax.delayedCall(1,parent.fight());
     		}
     		self.parent.removeChild(self);
     	});
@@ -593,15 +593,7 @@ function set3(game,GBA){
 			trace('battle')
 		})*/
 
-		//this.fight();
-
-		this.call_win_screen = function _call_win_screen(){
-				self.win_screen = new GBA.WIN_SCREEN(game,function(){trace('ok')},set1)
-				self.win_screen.anchor.setTo(0.5)
-				self.win_screen.position.setTo(400,200)
-				self.addChild(self.win_screen)
-				TweenMax.from(self.win_screen,1,{y:-300,ease:Back.easeOut})
-		}
+		this.fight();
 
 		this.call_battle_intro = function _call_battle_intro(){
 				self.battle_intro = new GBA.BATTLE_INTRO(game,self.fight,set2)
@@ -611,7 +603,17 @@ function set3(game,GBA){
 				TweenMax.from(self.battle_intro,1,{y:-300,ease:Back.easeOut})
 		}
 
-		this.call_win_screen();
+		this.call_win_screen = function _call_win_screen(){
+				self.win_screen = new GBA.WIN_SCREEN(game,function(){trace('ok')},set1)
+				self.win_screen.anchor.setTo(0.5)
+				self.win_screen.position.setTo(400,200)
+				self.addChild(self.win_screen)
+				TweenMax.from(self.win_screen,1,{y:-300,ease:Back.easeOut})
+		}
+
+		
+
+		//this.call_battle_intro();
 		return this;
 	}
 	GBA.Environment.prototype = Object.create(Phaser.Group.prototype);
