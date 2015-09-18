@@ -37,7 +37,7 @@ function set3(game,GBA){
 
   		 this.stat_bar = {};
 
-  		 this.atk_update = new GBA.ATK_UPDATE(game);
+  	
   		 /*this.stat_bar = new GBA.STAT_BAR(game)
   		 this.stat_bar.y = -70
   		 this.addChild(this.stat_bar)*/
@@ -144,11 +144,11 @@ function set3(game,GBA){
 
 	    //text
 	   if( mini!= undefined ){
-		    this.hp_txt =  new TextField(game,_hp+"/"+_fhp,0,5,"flappy",12,false);//_TextField(game,str,w,h,style,sz,border){
+		    this.hp_txt =  new TextField(game,_hp+"/"+_fhp,0,5,"flappy2",12,false);//_TextField(game,str,w,h,style,sz,border){
 		    this.hp_txt.x = 4
 		    this.addChild(this.hp_txt);
 
-		    this.mp_txt =  new TextField(game,_mp+"/"+_fmp,0,50,"flappy",12,false);//_TextField(game,str,w,h,style,sz,border){
+		    this.mp_txt =  new TextField(game,_mp+"/"+_fmp,0,50,"flappy2",12,false);//_TextField(game,str,w,h,style,sz,border){
 		    this.mp_txt.x = 4 
 		    this.addChild(this.mp_txt);
 		}
@@ -207,7 +207,7 @@ function set3(game,GBA){
     	bg.tint = 0x0066cc
     	this.addChild(bg);
 
-    	var battle_txt = new TextField(game,"BATTLE",0,0,"flappy",50,false);
+    	var battle_txt = new TextField(game,"BATTLE",0,0,"flappy2",50,false);
     	battle_txt.anchor.setTo(0.5)
     	battle_txt.position.setTo(-(battle_txt.text.width*0.5),-170)
     	battle_txt.text.tint = 0xffff00
@@ -227,14 +227,14 @@ function set3(game,GBA){
     			sp[k].frameName = GBA.UNIT[arr[k]].asset_src + "" + GBA.UNIT[arr[k]].asset_id + "0000";
     			this.addChild(sp[k]);
 
-    			sp_name[k] = new TextField(game,GBA.UNIT[arr[k]].name,0,0,"flappy",20,false);
+    			sp_name[k] = new TextField(game,GBA.UNIT[arr[k]].name,0,0,"flappy2",20,false);
 		    	sp_name[k].position.setTo(-(sp_name[k].text.width*0.5),40)
 		    	sp[k].addChild(sp_name[k])
     		}
 
     	}
 
-		var btn_tx = new TextField(game,"OK",0,0,"flappy",30,false);
+		var btn_tx = new TextField(game,"OK",0,0,"flappy2",30,false);
 			    	btn_tx.position.setTo(-(btn_tx.text.width*0.5),120)
 			    	this.addChild(btn_tx)
 
@@ -271,13 +271,13 @@ function set3(game,GBA){
     	bg.tint = 0x0066cc
     	this.addChild(bg);
 
-    	var victory_txt = new TextField(game,"VICTORY",0,0,"flappy",50,false);
+    	var victory_txt = new TextField(game,"VICTORY",0,0,"flappy2",50,false);
     	victory_txt.anchor.setTo(0.5)
     	victory_txt.position.setTo(-(victory_txt.text.width*0.5),-170)
     	victory_txt.text.tint = "0xffff00"
     	this.addChild(victory_txt)
 
-    	var btn_tx = new TextField(game,"OK",0,0,"flappy",40,false);
+    	var btn_tx = new TextField(game,"OK",0,0,"flappy2",40,false);
     	btn_tx.position.setTo(-(btn_tx.text.width*0.5),120)
     	this.addChild(btn_tx)
 
@@ -293,8 +293,6 @@ function set3(game,GBA){
     	xp_gain = new Array();
     	xp_total = new Array();
 
-    	
-
     	if(arr!= null || arr!=undefined){
     		for(k=0;k<arr.length;k++){
     			sp[k] = new Sprite(-240+(240*k),-10,"heroes");
@@ -302,12 +300,12 @@ function set3(game,GBA){
     			this.addChild(sp[k]);
 
 
-    			sp_name[k] = new TextField(game,GBA.UNIT[arr[k]].name,0,0,"flappy",20,false);
+    			sp_name[k] = new TextField(game,GBA.UNIT[arr[k]].name,0,0,"flappy2",20,false);
 		    	sp_name[k].position.setTo(-(sp_name[k].text.width*0.5),40)
 		    	sp[k].addChild(sp_name[k])
 		    	
 
-		    	xp_xt[k] = new TextField(game,"EXP",0,0,"flappy",15,false);
+		    	xp_xt[k] = new TextField(game,"EXP",0,0,"flappy2",15,false);
 		    	xp_xt[k].position.setTo(-(xp_xt[k].text.width*0.5),60)
 		    	xp_xt[k].text.tint = "0xffff00"
 		    	sp[k].addChild(xp_xt[k])
@@ -354,11 +352,11 @@ function set3(game,GBA){
     	container.alpha = 0
     	this.addChild(container)
 
-    	var msg = new TextField(game,"",0,0,"flappy",18,false);
+    	var msg = new TextField(game,"ss",0,0,"flappy2",18,false);
     	msg.position.setTo(-10,-40)
     	container.addChild(msg);
 
-    	var num_txt = new TextField(game,"",0,0,"flappy",24,false);
+    	var num_txt = new TextField(game,"122",0,0,"flappy2",24,false);
     	num_txt.position.setTo(-10,-10)
     	container.addChild(num_txt)
 
@@ -396,7 +394,7 @@ function set3(game,GBA){
     				});
     			}});
     	}
-    }
+    };
     GBA.ATK_UPDATE.prototype = Object.create(Phaser.Sprite.prototype);
     GBA.ATK_UPDATE.prototype.constructor = GBA.ATK_UPDATE;
 
@@ -421,7 +419,7 @@ function set3(game,GBA){
 		var TL = new TimelineMax // animation control for fight scene
 
 		set1 = [0,1,2];
-		set2 = [3];
+		set2 = [5];
 
 		var bg = new GBA.BG(game);
 		bg.x = 400;
@@ -496,7 +494,7 @@ function set3(game,GBA){
 									onComplete:function(){
 										tgt.hp -= attacker.atk
 
-										atk_update.position.setTo(attacker.tbody.scale.x== -1? 60 : -60 ,tgt.y)
+										atk_update.position.setTo(attacker.tbody.scale.x== -1?  tgt.x - 30 : tgt.x +30 ,tgt.y)
 										atk_update.animate(0,attacker.atk)
 										
 										tgt.tbody.tint = "0xff0000"
@@ -515,7 +513,6 @@ function set3(game,GBA){
 								TweenMax.to(attacker,0.3,{delay:0,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
 									onComplete:function(){
 										tgt.hp -= attacker.atk
-
 
 										tgt.tbody.tint = "0xff0000"
 										TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
@@ -541,7 +538,6 @@ function set3(game,GBA){
 
 			 if(who.role == "hero"){
 			 	removeArray(hero,who)
-
 			 }else
 			 if(who.role == "enemy"){
 			 	removeArray(enemy,who)
@@ -550,7 +546,7 @@ function set3(game,GBA){
 
 			 if(enemy.length<=0){
 			 	trace("you win")
-			 	TweenMax.delayedCall(1, self.call_win_screen);
+			 	TweenMax.delayedCall(3, self.call_win_screen);
 			 }
 		};
 
@@ -611,8 +607,7 @@ function set3(game,GBA){
 				TweenMax.from(self.win_screen,1,{y:-300,ease:Back.easeOut})
 		}
 
-		
-
+	
 		//this.call_battle_intro();
 		return this;
 	}
@@ -641,137 +636,24 @@ function set3(game,GBA){
 
     //UNITS
 
-    /*
+  /*
 	** ftype (0:single melee) (1:single range) (3:range AOE)
-	
-    */
+  **
+  */
 
     //hero1
-    GBA.UNIT[0] = {
-		hp:50,
-		fhp:50,
-		mp:10,
-		fmp:10,
-		atk:20,
-		mgc:2,
-		name:"Crimson",
-		def:1,
-		res:5,
-		spd:10,
-		ailments:"normal",
-		ftype:0,
-		xp_gain:20,
-		xp_total:100,
-		lvl:2,
-		asset_id:1,
-		asset_src:"hero",
-		
-	};
-	//hero 2
-	GBA.UNIT[1] = {
-		hp:15,
-		fhp:15,
-		mp:3,
-		fmp:3,
-		atk:6,
-		mgc:2,
-		name:"SHRUB",
-		def:3,
-		res:5,
-		spd:6,
-		ailments:"normal",
-		ftype:0,
-		xp_gain:10,
-		xp_total:100,
-		lvl:2,
-		asset_id:2,
-		asset_src:"hero",
-		
-	};
+   
+       GBA.UNIT = [
+        {name:'CRIMSON'           ,asset_src:"hero"         ,asset_id:1   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },
+        {name:'SHRUB'             ,asset_src:"hero"         ,asset_id:2   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },
+        {name:'AQUA'              ,asset_src:"hero"         ,asset_id:3   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },
 
-	//blob
-	GBA.UNIT[2] = {
-		hp:50,
-		fhp:50,
-		mp:3,
-		fmp:3,
-		atk:6,
-		mgc:2,
-		name:"AQUA",
-		def:3,
-		res:5,
-		spd:24,
-		ailments:"normal",
-		ftype:0,
-		xp_gain:0,
-		xp_total:100,
-		lvl:2,
-		asset_id:3,
-		asset_src:"hero",
-	};
+        {name:'GOBLIN'            ,asset_src:"char"         ,asset_id:1   ,hp:20    ,fhp:20    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },
+        {name:'THIEF'             ,asset_src:"char"         ,asset_id:2   ,hp:10    ,fhp:10    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },
+        {name:'FIGHTER'           ,asset_src:"char"         ,asset_id:3   ,hp:25    ,fhp:25    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },
+        {name:'SOLDIER'           ,asset_src:"char"         ,asset_id:4   ,hp:13    ,fhp:20    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  }
+    ];
 
-	//blob
-	GBA.UNIT[3] = {
-		hp:24,
-		fhp:24,
-		mp:3,
-		fmp:3,
-		atk:6,
-		mgc:2,
-		name:"GOBLIN",
-		def:3,
-		res:5,
-		spd:20,
-		ailments:"normal",
-		ftype:0,
-		xp_gain:0,
-		xp_total:100,
-		lvl:2,
-		asset_id:1,
-		asset_src:"char",
-	};
-
-	//blob
-	GBA.UNIT[4] = {
-		hp:24,
-		fhp:24,
-		mp:3,
-		fmp:3,
-		atk:6,
-		mgc:2,
-		name:"THIEF",
-		def:3,
-		res:5,
-		spd:20,
-		ailments:"normal",
-		ftype:0,
-		xp_gain:0,
-		xp_total:100,
-		lvl:2,
-		asset_id:2,
-		asset_src:"char",
-	};
-
-	//blob
-	GBA.UNIT[5] = {
-		hp:24,
-		fhp:24,
-		mp:3,
-		fmp:3,
-		atk:6,
-		mgc:2,
-		name:"FIGHTER",
-		def:3,
-		res:5,
-		spd:20,
-		ailments:"normal",
-		ftype:0,
-		xp_gain:0,
-		xp_total:100,
-		lvl:2,
-		asset_id:3,
-		asset_src:"char",
-	};
 
 };//end of set
 
@@ -790,5 +672,24 @@ function set3(game,GBA){
 3: _Hero
 4: _Hero
 5: _Hero
+
+*/
+
+
+
+
+
+
+/*
+    GBA.UNIT = [
+        {name:'CRIMSON'           ,asset_src:"hero"         ,asset_id:1   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10,  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },//1
+        {name:'SHRUB'             ,asset_src:"hero"         ,asset_id:2   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10,  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },//2
+        {name:'AQUA'              ,asset_src:"hero"         ,asset_id:3   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10,  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },//3
+
+        {name:'GOBLIN'            ,asset_src:"char"         ,asset_id:1   ,hp:20    ,fhp:20    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2,   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },//4
+        {name:'THIEF'             ,asset_src:"char"         ,asset_id:2   ,hp:10    ,fhp:10    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2,   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },//5
+        {name:'FIGHTER'           ,asset_src:"char"         ,asset_id:3   ,hp:25    ,fhp:25    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2,   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },//6
+        {name:'SOLDIER'           ,asset_src:"char"         ,asset_id:4   ,hp:13    ,fhp:20    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2,   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  }//7
+    ];
 
 */
