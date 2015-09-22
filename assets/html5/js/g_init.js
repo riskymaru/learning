@@ -45,7 +45,7 @@
 							AUTO = 0
 							*/
 
-							/**HTML SETTINGS*/
+							/**HTML SETTINGS**/
 
 							var ratio = Math.ceil(window.getDevicePixelRatio());
 							var window_width =  Math.ceil($(window).width() * ratio);
@@ -104,6 +104,26 @@
 								  }*/
 							}//goFullScreen</>
 
+
+
+								hideAddressBar =function _hideAddressBar()
+								{
+								  if(!window.location.hash)
+								  {
+								      if(document.height < window.outerHeight)
+								      {
+								          document.body.style.height = (window.outerHeight + 50) + 'px';
+								      }
+
+								      setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
+								  }
+								}
+
+								window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
+								window.addEventListener("orientationchange", hideAddressBar );
+
+
+
 			
 							if ( isMobile.Android() ) {
 						       GBA.device_id = navigator.platform
@@ -159,11 +179,12 @@
 							GBA.screen_mode = 0
 							
 							//others
-							GBA.spint_btn = null;
+					
 							
 							set1(GBA);//boot all assets	--//boot.js
 							set2(GBA);//load main game --//boot.js
 							set3(game,GBA);//load object classes --//object.js
+							set4(game,GBA);
 							setRequest(GBA)// set all php request --//boot.js
 
 							//initialize the framework
@@ -174,12 +195,14 @@
 							game.width = _gw;
 							game.height = _gh;
 
-							game.SLOT_SPIN = [1,1,1,1,1]
+				
 							game.state.add('Boot', GBA.Boot);
 							game.state.add('Preloader', GBA.Preloader);
-							game.state.add('MainMenu', GBA.MainMenu);
+							game.state.add('WorldMap', GBA.WorldMap);
+							game.state.add('Battle_UI', GBA.Battle_UI);
 							game.state.start('Boot');	
 							custom(game);	
+							
 				}//onLoad
 
 			};	

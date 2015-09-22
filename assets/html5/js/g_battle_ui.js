@@ -9,38 +9,69 @@ function set3(game,GBA){
     };
     GBA.BG.prototype = Object.create(Phaser.Sprite.prototype);
     GBA.BG.prototype.constructor = GBA.BG;
+
     //-------------------------------------------------------------------------
 
     GBA.Hero = function _Hero(game,_x,_y,unit){
-         Phaser.Sprite.call(this,game,0,0);
-  		 this.tbody = new Sprite(0,0,"heroes")
-  		 this.addChild(this.tbody);
+       Phaser.Sprite.call(this,game,0,0);
+
+
+        //CHARACTER STATUS
+       this.hp = GBA.UNIT[unit].hp
+       this.fhp = GBA.UNIT[unit].fhp
+       this.mp = GBA.UNIT[unit].mp
+       this.fmp = GBA.UNIT[unit].fmp
+       this.atk = GBA.UNIT[unit].atk
+       this.spd = GBA.UNIT[unit].spd
+       this.ailments = GBA.UNIT[unit].ailments
+       this.ftype = GBA.UNIT[unit].ftype
+       this.pos = new Array();
+       this._x = _x
+       this._y = _y
+       this.x = _x
+       this.y = _y
+       this.role = "hero"
+
+       //CHARACTER PARTS
+       this.cbody = new Sprite(0,0,"") // body parts holder
+       this.t_head = new Sprite(0,-20,"parts")
+       this.t_head.frameName = "hero"+(GBA.UNIT[unit].asset_id)+"0000" 
+       this.t_head.anchor.setTo(0.5,1)
+  		 this.t_body = new Sprite(0,-20,"parts")
+       this.t_body.frameName = "body"+(GBA.UNIT[unit].asset_id)+"0000" 
+       this.t_hand1 = new Sprite(-15,-20,"parts")
+       this.t_hand1.frameName = "hand"+(GBA.UNIT[unit].asset_id)+"0000"
+       this.t_hand2 = new Sprite(15,-20,"parts")
+       this.t_hand2.frameName = "hand"+(GBA.UNIT[unit].asset_id)+"0000"
+       this.t_foot1 = new Sprite(-8,-15,"parts")
+       this.t_foot1.frameName = "foot"+(GBA.UNIT[unit].asset_id)+"0000"
+       this.t_foot2 = new Sprite(6,-15,"parts")
+       this.t_foot2.frameName = "foot"+(GBA.UNIT[unit].asset_id)+"0000"
+
   		 this.anchor.setTo(0.5,0.5)
-  		 this.tbody.anchor.setTo(0.5,1)
-  		 this.pos = new Array();
-  		 this._x = _x
-  		 this._y = _y
-  		 this.x = _x
-  		 this.y = _y
-  		 this.role = "hero"
+  		 //this.cbody.frameName = ""//GBA.UNIT[unit].asset_src + "" +(GBA.UNIT[unit].asset_id)+"0000"
+       this.cbody.addChild(this.t_foot2)
+       this.cbody.addChild(this.t_foot1)
+       this.cbody.addChild(this.t_hand2)
+       this.cbody.addChild(this.t_body)
+       this.cbody.addChild(this.t_hand1)
+       this.cbody.addChild(this.t_head)
+       this.addChild(this.cbody);
+       this.cbody.anchor.setTo(0.5,1)
 
-  		 this.hp = GBA.UNIT[unit].hp
-  		 this.fhp = GBA.UNIT[unit].fhp
-  		 this.mp = GBA.UNIT[unit].mp
-  		 this.fmp = GBA.UNIT[unit].fmp
-  		 this.atk = GBA.UNIT[unit].atk
-  		 this.spd = GBA.UNIT[unit].spd
-  		 this.ailments = GBA.UNIT[unit].ailments
-  		 this.ftype = GBA.UNIT[unit].ftype
+       this.animate_idle = function _animate_idle(){
+          TweenMax.allTo([this.t_body,this.t_head,this.t_hand1,this.t_hand2],(0.25+((Math.random()*3)*0.1)),{y:-22,repeat:-1,yoyo:true})
+       }
 
-  		 this.tbody.frameName = GBA.UNIT[unit].asset_src + "" +(GBA.UNIT[unit].asset_id)+"0000"
 
-  		 this.stat_bar = {};
+      this.animate_idle();
 
-  	
-  		 /*this.stat_bar = new GBA.STAT_BAR(game)
-  		 this.stat_bar.y = -70
-  		 this.addChild(this.stat_bar)*/
+  		 /*
+         this.stat_bar = {};
+    		 this.stat_bar = new GBA.STAT_BAR(game)
+    		 this.stat_bar.y = -70
+    		 this.addChild(this.stat_bar)
+       */
     };
     GBA.Hero.prototype = Object.create(Phaser.Sprite.prototype);
     GBA.Hero.prototype.constructor = GBA.Hero;
@@ -48,35 +79,35 @@ function set3(game,GBA){
 
     GBA.Enemy = function _Enemy(game,_x,_y,unit){
          Phaser.Sprite.call(this,game,0,0);
-  		 this.tbody = new Sprite(0,0,"heroes")
-  		 this.addChild(this.tbody);
-  		 this.anchor.setTo(0.5,0.5)
-  		 this.tbody.anchor.setTo(0.5,1)
-  		 this.pos = new Array();
-  		 this._x = _x
-  		 this._y = _y
-  		 this.x = _x
-  		 this.y = _y
-  		 this.role = "enemy"
+    		 this.cbody = new Sprite(0,0,"heroes")
+    		 this.addChild(this.cbody);
+    		 this.anchor.setTo(0.5,0.5)
+    		 this.cbody.anchor.setTo(0.5,1)
+    		 this.pos = new Array();
+    		 this._x = _x
+    		 this._y = _y
+    		 this.x = _x
+    		 this.y = _y
+    		 this.role = "enemy"
 
-  		 this.hp = GBA.UNIT[unit].hp
-  		 this.fhp = GBA.UNIT[unit].fhp
-  		 this.mp = GBA.UNIT[unit].mp
-  		 this.fmp = GBA.UNIT[unit].fmp
-  		 this.atk = GBA.UNIT[unit].atk
-  		 this.spd = GBA.UNIT[unit].spd
-  		 this.ailments = GBA.UNIT[unit].ailments
-  		 this.ftype = GBA.UNIT[unit].ftype
+    		 this.hp = GBA.UNIT[unit].hp
+    		 this.fhp = GBA.UNIT[unit].fhp
+    		 this.mp = GBA.UNIT[unit].mp
+    		 this.fmp = GBA.UNIT[unit].fmp
+    		 this.atk = GBA.UNIT[unit].atk
+    		 this.spd = GBA.UNIT[unit].spd
+    		 this.ailments = GBA.UNIT[unit].ailments
+    		 this.ftype = GBA.UNIT[unit].ftype
 
-  		 this.tbody.frameName = GBA.UNIT[unit].asset_src + "" +(GBA.UNIT[unit].asset_id)+"0000"
+    		 this.cbody.frameName = GBA.UNIT[unit].asset_src + "" +(GBA.UNIT[unit].asset_id)+"0000"
 
-  		 this.stat_bar = new GBA.STAT_BAR(game,GBA.UNIT[unit].hp,
-	    									   GBA.UNIT[unit].fhp,
-	    									   GBA.UNIT[unit].mp,
-	    									   GBA.UNIT[unit].fmp)
-  		 this.stat_bar.y = -70
-  		 this.stat_bar.x = -25
-  		 this.addChild(this.stat_bar);
+    		 this.stat_bar = new GBA.STAT_BAR(game,GBA.UNIT[unit].hp,
+  	    									   GBA.UNIT[unit].fhp,
+  	    									   GBA.UNIT[unit].mp,
+  	    									   GBA.UNIT[unit].fmp)
+    		 this.stat_bar.y = -70
+    		 this.stat_bar.x = -25
+    		 this.addChild(this.stat_bar);
     };
     GBA.Enemy.prototype = Object.create(Phaser.Sprite.prototype);
     GBA.Enemy.prototype.constructor = GBA.Enemy;
@@ -103,42 +134,42 @@ function set3(game,GBA){
     	}
 
 	    this.hpbarbg = game.add.graphics(0,0)
-		this.hpbarbg.lineStyle(2, 0x151515, 0.5);
-		this.hpbarbg.beginFill(0x990000,1)
+		  this.hpbarbg.lineStyle(2, 0x151515, 0.5);
+		  this.hpbarbg.beginFill(0x990000,1)
 	    this.hpbarbg.drawRect(0, 0,box_width,box_height);
 	    this.addChild(this.hpbarbg);
 
 	    this.mpbarbg = game.add.graphics(0,0)
-		this.mpbarbg.lineStyle(2, 0x151515, 0.5);
-		this.mpbarbg.beginFill(0x333333,1)
+		  this.mpbarbg.lineStyle(2, 0x151515, 0.5);
+	   	this.mpbarbg.beginFill(0x333333,1)
 	    this.mpbarbg.drawRect(0, box_height,box_width,box_height);
 	    this.addChild(this.mpbarbg);
 
 	    //status bars
     	this.hpbar = game.add.graphics(0,0)
-		//this.hpbar.lineStyle(2, 0x151515, 0.5);
-		this.hpbar.beginFill(0x33bb00,1)
+		  //this.hpbar.lineStyle(2, 0x151515, 0.5);
+		  this.hpbar.beginFill(0x33bb00,1)
 	    this.hpbar.drawRect(0, 0,box_width,box_height);
 	    this.addChild(this.hpbar);
 
 	    this.mpbar = game.add.graphics(0,0)
-		//this.mpbar.lineStyle(2, 0x151515, 0.5);
-		this.mpbar.beginFill(0x0066ff,1)
+		  //this.mpbar.lineStyle(2, 0x151515, 0.5);
+		  this.mpbar.beginFill(0x0066ff,1)
 	    this.mpbar.drawRect(0, box_height,box_width,box_height);
 	    this.addChild(this.mpbar);
 
 	    //shadow
 	    this.hpbar_shadow = game.add.graphics(0,0)
-		//this.hpbar_shadow.lineStyle(2, 0x151515, 0.5);
-		this.hpbar_shadow.beginFill(0xffffff,1)
-	    this.hpbar_shadow.drawRect(0, 0,box_width,box_height);
+		  //this.hpbar_shadow.lineStyle(2, 0x151515, 0.5);
+		  this.hpbar_shadow.beginFill(0xffffff,1)
+	    this.hpbar_shadow.drawRect(0, 0,box_width,box_height*0.5);
 	    this.hpbar_shadow.alpha = 0.2
 	    this.addChild(this.hpbar_shadow);
 
 	    this.mpbar_shadow = game.add.graphics(0,0)
-		//this.mpbar_shadow.lineStyle(2, 0x151515, 0.5);
-		this.mpbar_shadow.beginFill(0xffffff,1)
-	    this.mpbar_shadow.drawRect(0, box_height,box_width,box_height);
+		  //this.mpbar_shadow.lineStyle(2, 0x151515, 0.5);
+		  this.mpbar_shadow.beginFill(0xffffff,1)
+	    this.mpbar_shadow.drawRect(0, box_height,box_width,box_height*0.5);
 	    this.mpbar_shadow.alpha = 0.2
 	    this.addChild(this.mpbar_shadow);
 
@@ -418,7 +449,7 @@ function set3(game,GBA){
 
 		var TL = new TimelineMax // animation control for fight scene
 
-		set1 = [0,1,2];
+		set1 = [2,1,2];
 		set2 = [5];
 
 		var bg = new GBA.BG(game);
@@ -442,7 +473,7 @@ function set3(game,GBA){
 			if(set2.length>0){
 					for(k=0;k<set2.length;k++){
 						enemy[k] = new GBA.Enemy(game,k==0? 610 : xpos[1],ypos[k],set2[k]);
-						enemy[k].tbody.scale.x =-1
+						enemy[k].cbody.scale.x =-1
 						this.addChild(enemy[k])
 					}
 			}
@@ -490,15 +521,15 @@ function set3(game,GBA){
 					//melee
 					if(attacker!=undefined && tgt!=undefined && type == 0 && tgt.hp>0 && tgt!=null){
 							
-								TweenMax.to(attacker,0.2,{delay:0,x:tgt.x + (attacker.tbody.scale.x== -1? 60 : -60 ),y:tgt.y,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
+								TweenMax.to(attacker,0.2,{delay:0,x:tgt.x + (attacker.cbody.scale.x== -1? 60 : -60 ),y:tgt.y,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
 									onComplete:function(){
 										tgt.hp -= attacker.atk
 
-										atk_update.position.setTo(attacker.tbody.scale.x== -1?  tgt.x - 30 : tgt.x +30 ,tgt.y)
+										atk_update.position.setTo(attacker.cbody.scale.x== -1?  tgt.x - 30 : tgt.x +30 ,tgt.y)
 										atk_update.animate(0,attacker.atk)
 										
-										tgt.tbody.tint = "0xff0000"
-										TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
+										tgt.cbody.tint = "0xff0000"
+										TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.cbody.tint = "0xffffff";}});
 
 										if(tgt.hp <=0){
 											tgt.hp = 0
@@ -512,10 +543,11 @@ function set3(game,GBA){
 					if(attacker!=undefined && tgt!=undefined && type == 1 && tgt.hp>0 && tgt!=null){
 								TweenMax.to(attacker,0.3,{delay:0,alpha:1,ease:Back.easeIn,startAt:{alpha:0},
 									onComplete:function(){
+                    
 										tgt.hp -= attacker.atk
 
-										tgt.tbody.tint = "0xff0000"
-										TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.tbody.tint = "0xffffff";}});
+										tgt.cbody.tint = "0xff0000"
+										TweenMax.to(tgt,0.1,{x:tgt.x-3,yoyo:true,repeat:5,onComplete:function(){tgt.cbody.tint = "0xffffff";}});
 
 										if(tgt.hp <=0){
 											tgt.hp = 0
@@ -531,8 +563,8 @@ function set3(game,GBA){
 		}//<AttackMode
 
 		this.checkDead = function _checkDead(who){
-			 who.tbody.loadTexture('btn');
-			 who.tbody.frameName = "tomb0000"
+			 who.cbody.loadTexture('btn');
+			 who.cbody.frameName = "tomb0000"
 			 removeArray(whosturn,who);
 			 removeArray(whostgt,who);
 
@@ -589,7 +621,7 @@ function set3(game,GBA){
 			trace('battle')
 		})*/
 
-		this.fight();
+		//this.fight();
 
 		this.call_battle_intro = function _call_battle_intro(){
 				self.battle_intro = new GBA.BATTLE_INTRO(game,self.fight,set2)
@@ -612,7 +644,7 @@ function set3(game,GBA){
 		return this;
 	}
 	GBA.Environment.prototype = Object.create(Phaser.Group.prototype);
-    GBA.Environment.prototype.constructor = GBA.Environment;
+  GBA.Environment.prototype.constructor = GBA.Environment;
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -678,18 +710,3 @@ function set3(game,GBA){
 
 
 
-
-
-/*
-    GBA.UNIT = [
-        {name:'CRIMSON'           ,asset_src:"hero"         ,asset_id:1   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10,  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },//1
-        {name:'SHRUB'             ,asset_src:"hero"         ,asset_id:2   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10,  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },//2
-        {name:'AQUA'              ,asset_src:"hero"         ,asset_id:3   ,hp:50    ,fhp:50    ,mp:10    ,fmp:10   ,atk:10   ,mgc:10,  ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:10   ,ailments:"normal"  },//3
-
-        {name:'GOBLIN'            ,asset_src:"char"         ,asset_id:1   ,hp:20    ,fhp:20    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2,   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },//4
-        {name:'THIEF'             ,asset_src:"char"         ,asset_id:2   ,hp:10    ,fhp:10    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2,   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },//5
-        {name:'FIGHTER'           ,asset_src:"char"         ,asset_id:3   ,hp:25    ,fhp:25    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2,   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  },//6
-        {name:'SOLDIER'           ,asset_src:"char"         ,asset_id:4   ,hp:13    ,fhp:20    ,mp:5    ,fmp:5     ,atk:5    ,mgc:2,   ,def:5   ,res:1   ,spd:10   ,ftype:0    ,xp_gain:0   ,xp_total:50   ,lvl:1   ,xp_loot:15   ,ailments:"normal"  }//7
-    ];
-
-*/
