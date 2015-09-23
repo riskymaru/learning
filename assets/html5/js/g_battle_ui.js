@@ -583,7 +583,8 @@ function set3(game,GBA){
 		};
 
 		this.fight = function _fight(o){
-			trace("FIGHT!")
+			     
+            trace("FIGHT!")
 
 						function compare(a,b) {
 						  if (a.spd < b.spd)
@@ -639,7 +640,6 @@ function set3(game,GBA){
 				TweenMax.from(self.win_screen,1,{y:-300,ease:Back.easeOut})
 		}
 
-	
 		//this.call_battle_intro();
 		return this;
 	}
